@@ -1,6 +1,18 @@
 # Dependencies
 node_modules/
 
+# Personal files — certificates, documents, images
+*.pdf
+*.docx
+*.doc
+*.jpg
+*.jpeg
+*.png
+*.gif
+WhatsApp*/
+Peechara_Sathwik_Resume/
+sathwik.jpeg
+
 # Build output
 dist/
 build/
