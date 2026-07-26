@@ -278,6 +278,14 @@ export default function Portfolio() {
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap');
 
+        html, body {
+          overflow-x: hidden;
+          width: 100%;
+          max-width: 100vw;
+          margin: 0;
+          padding: 0;
+        }
+
         .pf-root {
           --bg: #0A0D10;
           --bg-elev: #12161B;
@@ -297,6 +305,8 @@ export default function Portfolio() {
           font-family: 'Inter', sans-serif;
           min-height: 100vh;
           width: 100%;
+          max-width: 100vw;
+          overflow-x: hidden;
           line-height: 1.5;
           -webkit-font-smoothing: antialiased;
         }
@@ -309,15 +319,24 @@ export default function Portfolio() {
         .pf-wrap {
           max-width: 1040px;
           margin: 0 auto;
-          padding: 0 28px;
-          padding-left: max(28px, env(safe-area-inset-left));
-          padding-right: max(28px, env(safe-area-inset-right));
+          padding: 0 24px;
+          padding-left: max(24px, env(safe-area-inset-left));
+          padding-right: max(24px, env(safe-area-inset-right));
+          width: 100%;
+          box-sizing: border-box;
         }
-        @media (max-width: 480px) {
+        @media (max-width: 768px) {
           .pf-wrap {
             padding: 0 20px;
             padding-left: max(20px, env(safe-area-inset-left));
             padding-right: max(20px, env(safe-area-inset-right));
+          }
+        }
+        @media (max-width: 480px) {
+          .pf-wrap {
+            padding: 0 16px;
+            padding-left: max(16px, env(safe-area-inset-left));
+            padding-right: max(16px, env(safe-area-inset-right));
           }
         }
 
@@ -487,9 +506,10 @@ export default function Portfolio() {
 
         /* ---------- pipeline (signature) ---------- */
         .pf-pipeline {
-          display: flex; align-items: center; flex-wrap: wrap; gap: 0;
-          padding: 26px 24px; border: 1px solid var(--border); border-radius: 12px;
+          display: flex; align-items: center; flex-wrap: wrap; gap: 8px 0;
+          padding: 20px 18px; border: 1px solid var(--border); border-radius: 12px;
           background: linear-gradient(180deg, var(--bg-elev), var(--bg-elev-2));
+          max-width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch;
         }
         .pf-node { display: flex; align-items: center; gap: 9px; opacity: 0.4;
           animation: pf-node-light 3s ease-in-out infinite; }
@@ -531,7 +551,7 @@ export default function Portfolio() {
 
         /* ---------- section shell ---------- */
         .pf-section { padding: 72px 0; border-top: 1px solid var(--border-soft); }
-        .pf-section-head { display: flex; align-items: baseline; gap: 14px; margin-bottom: 24px; }
+        .pf-section-head { display: flex; align-items: baseline; gap: 10px 14px; margin-bottom: 24px; flex-wrap: wrap; }
         .pf-section-tag {
           font-family: 'JetBrains Mono', monospace; font-size: 12.5px; color: var(--accent);
           letter-spacing: 0.08em; text-transform: uppercase;
@@ -623,8 +643,8 @@ export default function Portfolio() {
         .pf-timeline-content {
           border: 1px solid var(--border); border-radius: 12px; padding: 22px; background: var(--bg-elev);
         }
-        .pf-edu-degree { font-family: 'Space Grotesk', sans-serif; font-weight: 600; font-size: 17px; margin: 0 0 4px; }
-        .pf-edu-school { color: var(--text-dim); font-size: 14.5px; margin: 0 0 12px; }
+        .pf-edu-degree { font-family: 'Space Grotesk', sans-serif; font-weight: 600; font-size: 17px; margin: 0 0 4px; word-break: break-word; }
+        .pf-edu-school { color: var(--text-dim); font-size: 14.5px; margin: 0 0 12px; word-break: break-word; }
         .pf-edu-desc { color: var(--text-dim); font-size: 13.5px; line-height: 1.6; margin: 0 0 14px; }
         .pf-edu-meta { display: flex; gap: 14px; align-items: center; flex-wrap: wrap; }
         .pf-edu-period, .pf-edu-metric {
@@ -632,6 +652,15 @@ export default function Portfolio() {
         }
         .pf-edu-metric {
           color: var(--teal); padding: 3px 8px; border-radius: 4px; background: var(--teal-soft); font-weight: 600;
+        }
+
+        @media (max-width: 600px) {
+          .pf-timeline { padding-left: 18px; }
+          .pf-timeline::before { left: 4px; }
+          .pf-timeline-marker { left: -18px; width: 12px; height: 12px; top: 6px; box-shadow: 0 0 0 3px var(--bg); }
+          .pf-timeline-content { padding: 16px; }
+          .pf-project { padding: 20px 16px; }
+          .pf-oss-card { padding: 20px 16px; }
         }
 
         /* ---------- certs + achievements ---------- */
