@@ -310,6 +310,15 @@ export default function Portfolio() {
           max-width: 1040px;
           margin: 0 auto;
           padding: 0 28px;
+          padding-left: max(28px, env(safe-area-inset-left));
+          padding-right: max(28px, env(safe-area-inset-right));
+        }
+        @media (max-width: 480px) {
+          .pf-wrap {
+            padding: 0 20px;
+            padding-left: max(20px, env(safe-area-inset-left));
+            padding-right: max(20px, env(safe-area-inset-right));
+          }
         }
 
         /* ---------- reveal ---------- */
@@ -374,6 +383,14 @@ export default function Portfolio() {
         @media (max-width: 720px) {
           .pf-nav-links { display: none; }
           .pf-burger { display: block; }
+        }
+
+        @media (max-width: 480px) {
+          .pf-hero { padding: 56px 0 48px; }
+          .pf-hero-ctas { flex-direction: column; align-items: flex-start; }
+          .pf-hero-ctas a { width: 100%; justify-content: center; }
+          .pf-contact { padding: 64px 0 40px; }
+          .pf-section { padding: 64px 0; }
         }
 
         /* ---------- hero ---------- */
