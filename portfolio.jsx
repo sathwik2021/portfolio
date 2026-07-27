@@ -625,9 +625,17 @@ export default function Portfolio() {
         }
         .pf-mt-tab {
           background: rgba(18, 22, 27, 0.8); border: 1px solid var(--border);
-          color: var(--text-dim); font-family: 'JetBrains Mono', monospace; font-size: 12px;
-          padding: 8px 16px; border-radius: 6px; cursor: pointer;
-          transition: all 0.25s ease; display: flex; align-items: center; gap: 8px;
+          color: var(--text-dim); font-family: 'Space Grotesk', sans-serif; font-size: 13px;
+          padding: 8px 18px; border-radius: 6px; cursor: pointer;
+          transition: all 0.25s ease; display: flex; align-items: center; gap: 6px;
+          position: relative;
+        }
+        .pf-mt-tab::before {
+          content: "//";
+          color: var(--text-faint);
+          margin-right: 4px;
+          font-size: 12px;
+          letter-spacing: 0.08em;
         }
         .pf-mt-tab:hover { border-color: var(--accent-soft); color: var(--text); }
         .pf-mt-tab.active {
