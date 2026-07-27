@@ -317,8 +317,6 @@ export default function Portfolio() {
   const [activeCategory, setActiveCategory] = useState("All");
   const [activeSkillCategory, setActiveSkillCategory] = useState("All");
   const [activeCharaId, setActiveCharaId] = useState("sathwik");
-  const [pageLoaded, setPageLoaded] = useState(false);
-  const [inkDone, setInkDone] = useState(false);
 
   const currentChara = CHARACTER_PROFILES.find((c) => c.id === activeCharaId) || CHARACTER_PROFILES[0];
   const [charaImg, setCharaImg] = useState(currentChara.image);
@@ -327,13 +325,6 @@ export default function Portfolio() {
     const c = CHARACTER_PROFILES.find((item) => item.id === activeCharaId);
     if (c) setCharaImg(c.image);
   }, [activeCharaId]);
-
-  // Ink loader sequence
-  useEffect(() => {
-    const t1 = setTimeout(() => setPageLoaded(true), 2200);
-    const t2 = setTimeout(() => setInkDone(true), 3000);
-    return () => { clearTimeout(t1); clearTimeout(t2); };
-  }, []);
 
   const scrollTo = (id) => {
     setMenuOpen(false);
@@ -352,22 +343,6 @@ export default function Portfolio() {
 
   return (
     <div className="pf-root">
-
-      {/* NOISE TEXTURE OVERLAY */}
-      <div className="pf-noise-overlay" aria-hidden="true" />
-
-      {/* INK SPLASH LOADER */}
-      {!inkDone && (
-        <div className={`pf-ink-loader ${pageLoaded ? "pf-ink-loader--done" : ""}`} aria-hidden="true">
-          <div className="pf-ink-blob pf-ink-blob--1" />
-          <div className="pf-ink-blob pf-ink-blob--2" />
-          <div className="pf-ink-blob pf-ink-blob--3" />
-          <div className="pf-ink-blob pf-ink-blob--4" />
-          <div className="pf-ink-loader-logo">
-            <img src="/logo.png" alt="S" style={{width:48,height:48,objectFit:'contain'}} />
-          </div>
-        </div>
-      )}
 
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap');
@@ -525,70 +500,7 @@ export default function Portfolio() {
           .pf-section { padding: 64px 0; }
         }
 
-        /* ---------- INK SPLASH LOADER ---------- */
-        .pf-ink-loader {
-          position: fixed; inset: 0; z-index: 9999; background: #000;
-          display: flex; align-items: center; justify-content: center;
-          transition: opacity 0.7s ease 0.1s;
-          pointer-events: all;
-        }
-        .pf-ink-loader--done {
-          opacity: 0; pointer-events: none;
-        }
-        .pf-ink-loader-logo {
-          position: relative; z-index: 10;
-          animation: pf-ldr-logo 0.7s cubic-bezier(0.22,1,0.36,1) 0.3s both;
-        }
-        @keyframes pf-ldr-logo {
-          from { opacity: 0; transform: scale(0.7); }
-          to   { opacity: 1; transform: scale(1); }
-        }
-        .pf-ink-blob {
-          position: absolute; border-radius: 50%; transform: scale(0);
-        }
-        .pf-ink-blob--1 {
-          width: 280px; height: 280px; top: -80px; left: -80px;
-          background: #FF8A3D;
-          animation: pf-blob-expand 1.4s cubic-bezier(0.22,1,0.36,1) 0.1s forwards;
-        }
-        .pf-ink-blob--2 {
-          width: 350px; height: 350px; bottom: -120px; right: -120px;
-          background: #4FD1C5;
-          animation: pf-blob-expand 1.4s cubic-bezier(0.22,1,0.36,1) 0.25s forwards;
-        }
-        .pf-ink-blob--3 {
-          width: 200px; height: 200px; top: 35%; left: 15%;
-          background: #FF8A3D; opacity: 0.5;
-          animation: pf-blob-expand 1.2s cubic-bezier(0.22,1,0.36,1) 0.4s forwards;
-        }
-        .pf-ink-blob--4 {
-          width: 600px; height: 600px;
-          top: 50%; left: 50%; margin: -300px 0 0 -300px;
-          background: #0A0D10;
-          animation: pf-blob-expand 1.6s cubic-bezier(0.22,1,0.36,1) 0.6s forwards;
-        }
-        @keyframes pf-blob-expand {
-          0%   { transform: scale(0); opacity: 0; }
-          30%  { opacity: 1; }
-          100% { transform: scale(8); opacity: 1; }
-        }
-
-        /* ---------- NOISE TEXTURE OVERLAY ---------- */
-        .pf-noise-overlay {
-          position: fixed; inset: 0; z-index: 2; pointer-events: none;
-          background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-          opacity: 0.028;
-          animation: pf-noise-drift 6s steps(8) infinite;
-        }
-        @keyframes pf-noise-drift {
-          0%   { background-position: 0 0; }
-          25%  { background-position: -30px 20px; }
-          50%  { background-position: 20px -15px; }
-          75%  { background-position: -10px 30px; }
-          100% { background-position: 0 0; }
-        }
-
-        /* ---------- HERO ENTRANCE (after loader) ---------- */
+        /* ---------- HERO ENTRANCE ---------- */
         @keyframes pf-hero-enter {
           from { opacity: 0; transform: translateY(28px); }
           to   { opacity: 1; transform: translateY(0); }
@@ -601,81 +513,22 @@ export default function Portfolio() {
           from { opacity: 0; }
           to   { opacity: 1; }
         }
-        .pf-hero-entrance { animation: pf-hero-enter 0.9s cubic-bezier(0.22,1,0.36,1) 2.4s both; }
-        .pf-figure-entrance { animation: pf-figure-enter 1s cubic-bezier(0.22,1,0.36,1) 2.8s both; }
-        .pf-watermark-entrance { animation: pf-watermark-enter 1.2s ease 2.6s both; }
-
-        /* ---------- GLITCH EFFECT on name ---------- */
-        .pf-mt-name-glitch { position: relative; }
-        .pf-mt-name-glitch::before,
-        .pf-mt-name-glitch::after {
-          content: attr(data-text);
-          position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-          background: inherit; overflow: hidden;
-        }
-        .pf-mt-name-glitch::before {
-          color: #4FD1C5; z-index: -1;
-          clip-path: polygon(0 18%, 100% 18%, 100% 42%, 0 42%);
-          animation: pf-glitch-before 5s steps(1) infinite;
-        }
-        .pf-mt-name-glitch::after {
-          color: #FF8A3D; z-index: -1;
-          clip-path: polygon(0 58%, 100% 58%, 100% 82%, 0 82%);
-          animation: pf-glitch-after 5s steps(1) infinite 0.3s;
-        }
-        @keyframes pf-glitch-before {
-          0%, 88%, 100% { transform: translate(0,0); opacity: 0; }
-          90%  { transform: translate(-4px, 1px); opacity: 0.85; }
-          92%  { transform: translate(3px,-1px); opacity: 0.85; }
-          94%  { transform: translate(-2px, 0);  opacity: 0.85; }
-          96%  { transform: translate(0,0); opacity: 0; }
-        }
-        @keyframes pf-glitch-after {
-          0%, 86%, 100% { transform: translate(0,0); opacity: 0; }
-          88%  { transform: translate(4px,-1px); opacity: 0.7; }
-          90%  { transform: translate(-3px, 1px); opacity: 0.7; }
-          93%  { transform: translate(2px, 0);  opacity: 0.7; }
-          95%  { transform: translate(0,0); opacity: 0; }
-        }
+        .pf-hero-entrance { animation: pf-hero-enter 0.9s cubic-bezier(0.22,1,0.36,1) 0.6s both; }
+        .pf-figure-entrance { animation: pf-figure-enter 1s cubic-bezier(0.22,1,0.36,1) 0.2s both; }
+        .pf-watermark-entrance { animation: pf-watermark-enter 1.2s ease 0.3s both; }
 
         /* ---------- TAB CONTENT FADE IN ---------- */
         .pf-mt-data-anim {
-          animation: pf-tab-slide 0.38s cubic-bezier(0.22,1,0.36,1) both;
+          animation: pf-tab-slide 0.65s cubic-bezier(0.22,1,0.36,1) both;
         }
         @keyframes pf-tab-slide {
           from { opacity: 0; transform: translateX(-14px); }
           to   { opacity: 1; transform: translateX(0); }
         }
 
-        /* ---------- SCANLINES on figure ---------- */
+        /* ---------- FIGURE WRAP ---------- */
         .pf-mt-figure-wrap {
           position: relative; width: 100%; max-width: 320px;
-        }
-        .pf-mt-scanlines {
-          position: absolute; inset: 0; z-index: 4; pointer-events: none;
-          background: repeating-linear-gradient(
-            0deg,
-            transparent 0px,
-            transparent 3px,
-            rgba(0,0,0,0.07) 3px,
-            rgba(0,0,0,0.07) 4px
-          );
-          border-radius: 0;
-          animation: pf-scanlines-move 8s linear infinite;
-        }
-        @keyframes pf-scanlines-move {
-          from { background-position: 0 0; }
-          to   { background-position: 0 100px; }
-        }
-        .pf-mt-scan-flicker {
-          position: absolute; inset: 0; z-index: 5; pointer-events: none;
-          background: linear-gradient(transparent 40%, rgba(79,209,197,0.012) 50%, transparent 60%);
-          animation: pf-scan-flicker 3.5s ease-in-out infinite;
-        }
-        @keyframes pf-scan-flicker {
-          0%, 100% { transform: translateY(-100%); opacity: 0; }
-          40%       { opacity: 1; }
-          60%       { transform: translateY(200%); opacity: 0; }
         }
 
         /* ---------- MARRIAGE TOXIN ANIME STYLE HERO & CHARACTER SHOWCASE ---------- */
@@ -1140,7 +993,7 @@ export default function Portfolio() {
         <div className="pf-mt-layout">
           {/* Left Column: Character Data — key forces re-mount animation on tab change */}
           <div key={activeCharaId} className="pf-mt-data pf-mt-data-anim pf-hero-entrance">
-            <h1 className="pf-mt-name pf-mt-name-glitch" data-text={currentChara.name}>{currentChara.name}</h1>
+            <h1 className="pf-mt-name">{currentChara.name}</h1>
             <div className="pf-mt-role">{currentChara.title}</div>
 
             <div className="pf-mt-divider" />
@@ -1170,11 +1023,9 @@ export default function Portfolio() {
             </div>
           </div>
 
-          {/* Right Column: Person Cutout with scanlines overlay */}
+          {/* Right Column: Person Cutout */}
           <div className="pf-mt-figure-col pf-figure-entrance">
             <div className="pf-mt-figure-wrap">
-              <div className="pf-mt-scanlines" aria-hidden="true" />
-              <div className="pf-mt-scan-flicker" aria-hidden="true" />
               <div className="pf-mt-figure-card">
                 <img src="/sathwik_cutout.png" alt={PROFILE.name} className="pf-mt-figure-img" />
               </div>
