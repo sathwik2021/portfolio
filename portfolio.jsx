@@ -40,6 +40,65 @@ const PROFILE = {
   localResume: "/Peechara_Sathwik_Resume.pdf",
 };
 
+const CHARACTER_PROFILES = [
+  {
+    id: "sathwik",
+    name: "Peechara Sathwik",
+    title: "Python Developer — AI & Data Analytics",
+    summary: "I build AI systems that talk to each other. Chatbots that fail over between model providers, pipelines that turn a prompt into a manga panel, agents that argue about your code until it's right. NLP, computer vision, and the backend plumbing that keeps it all running.",
+    image: "/sathwik_cutout.png",
+    stats: [
+      { label: "PRIMARY STACK", value: "Python, Flask, PyMuPDF, SQLAlchemy" },
+      { label: "AI PIPELINE", value: "Groq + Gemini Failover, SSE Streaming" },
+      { label: "FINE-TUNED LORA", value: "15,500 Steps on Kaggle Dual-T4 GPUs" },
+      { label: "STATUS", value: "Available for Internships & Full-Time" },
+    ],
+    bgText: ["PEECHARA", "SATHWIK"],
+  },
+  {
+    id: "nexus",
+    name: "NexusAI Bot",
+    title: "Multimodal AI Chatbot & Provider Failover",
+    summary: "A resilient full-stack chatbot featuring automatic fallback between Groq, Gemini, and Ollama APIs. Streams response tokens via Server-Sent Events (SSE) and ingests PDF documents using PyMuPDF.",
+    image: "/logo.png",
+    stats: [
+      { label: "FAILOVER ENGINE", value: "Groq <-> Gemini <-> Ollama" },
+      { label: "STREAMING", value: "Server-Sent Events (SSE)" },
+      { label: "DATABASE", value: "Normalized MySQL with SQLAlchemy" },
+      { label: "ADVERSARIAL", value: "Stress-tested against model downtime" },
+    ],
+    bgText: ["NEXUS", "AI BOT"],
+  },
+  {
+    id: "manga",
+    name: "Manga Pipeline",
+    title: "3-Stage GPU Text-to-Manga Generator",
+    summary: "A multi-stage GPU system: Gemini extracts narrative beats from story text, a 20-rule layout engine composes page panels, and a LoRA fine-tuned Stable Diffusion 1.5 renders each panel.",
+    image: "/logo.png",
+    stats: [
+      { label: "DATASET", value: "Manga109 (15,500 Training Steps)" },
+      { label: "HARDWARE", value: "Kaggle Dual-T4 GPUs" },
+      { label: "LAYOUT ENGINE", value: "20-Rule Composition Algorithm" },
+      { label: "FRAMEWORK", value: "PyTorch, Diffusers, OpenCV" },
+    ],
+    bgText: ["MANGA", "LORA SD"],
+  },
+  {
+    id: "codex",
+    name: "Codex Council",
+    title: "Multi-Agent Code Review & Consensus Engine",
+    summary: "An autonomous multi-agent system where specialized AI agents debate, critique, and refactor code until reaching consensus on correctness, security, and performance.",
+    image: "/logo.png",
+    stats: [
+      { label: "ENGINE", value: "Multi-Agent Consensus Loop" },
+      { label: "CRITIQUE", value: "Automated Code & Security Review" },
+      { label: "ORCHESTRATION", value: "Python & Agent Workflows" },
+      { label: "STATUS", value: "Active Autonomous Project" },
+    ],
+    bgText: ["CODEX", "COUNCIL"],
+  },
+];
+
 const ENGINEERING_PILLARS = [
   {
     title: "LLM Routing & Failover",
@@ -257,6 +316,15 @@ export default function Portfolio() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [activeCategory, setActiveCategory] = useState("All");
   const [activeSkillCategory, setActiveSkillCategory] = useState("All");
+  const [activeCharaId, setActiveCharaId] = useState("sathwik");
+
+  const currentChara = CHARACTER_PROFILES.find((c) => c.id === activeCharaId) || CHARACTER_PROFILES[0];
+  const [charaImg, setCharaImg] = useState(currentChara.image);
+
+  useEffect(() => {
+    const c = CHARACTER_PROFILES.find((item) => item.id === activeCharaId);
+    if (c) setCharaImg(c.image);
+  }, [activeCharaId]);
 
   const scrollTo = (id) => {
     setMenuOpen(false);
@@ -360,12 +428,31 @@ export default function Portfolio() {
           height: 64px;
         }
         .pf-logo {
-          display: flex; align-items: center; gap: 8px;
-          font-family: 'Space Grotesk', sans-serif; font-weight: 600; font-size: 15px;
+          display: flex; align-items: center; gap: 10px;
+          font-family: 'Space Grotesk', sans-serif; font-weight: 600; font-size: 16px;
           color: var(--text); letter-spacing: 0.01em; cursor: pointer;
         }
-        .pf-logo-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--accent);
-          box-shadow: 0 0 0 3px var(--accent-soft); }
+        .pf-logo-mark {
+          width: 30px; height: 30px; border-radius: 6px;
+          transition: transform 0.2s ease, opacity 0.2s ease;
+        }
+        .pf-logo:hover .pf-logo-mark {
+          transform: scale(1.05);
+          opacity: 0.95;
+        }
+        .pf-footer-brand {
+          display: flex; align-items: center; gap: 10px; cursor: pointer;
+          color: var(--text); font-family: 'Space Grotesk', sans-serif; font-weight: 600; font-size: 14.5px;
+          transition: opacity 0.2s ease;
+        }
+        .pf-footer-brand:hover { opacity: 0.9; }
+        .pf-logo-mark-sm {
+          width: 26px; height: 26px; border-radius: 6px;
+          transition: transform 0.2s ease;
+        }
+        .pf-footer-brand:hover .pf-logo-mark-sm {
+          transform: scale(1.06);
+        }
         .pf-nav-links { display: flex; align-items: center; gap: 32px; }
         .pf-nav-link {
           background: none; border: none; cursor: pointer;
@@ -412,8 +499,100 @@ export default function Portfolio() {
           .pf-section { padding: 64px 0; }
         }
 
-        /* ---------- hero ---------- */
-        .pf-hero { padding: 88px 0 72px; }
+        /* ---------- MARRIAGE TOXIN ANIME STYLE HERO & CHARACTER SHOWCASE ---------- */
+        .pf-mt-hero {
+          position: relative; padding: 50px 0 64px; overflow: hidden;
+        }
+        .pf-mt-bg-watermark {
+          position: absolute; top: 10px; right: -10px; z-index: 0; pointer-events: none;
+          font-family: 'Space Grotesk', sans-serif; font-weight: 900; font-size: clamp(70px, 13vw, 160px);
+          line-height: 0.85; text-transform: uppercase; color: rgba(255, 255, 255, 0.03);
+          letter-spacing: -0.03em; user-select: none; text-align: right;
+          -webkit-text-stroke: 1.5px rgba(255, 255, 255, 0.05);
+        }
+        .pf-mt-layout {
+          position: relative; z-index: 2; display: grid; grid-template-columns: 1fr 340px; gap: 44px; align-items: start;
+        }
+        @media (max-width: 960px) {
+          .pf-mt-layout { grid-template-columns: 1fr; }
+        }
+
+        .pf-mt-selector {
+          position: relative; z-index: 3;
+          display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 32px;
+        }
+        .pf-mt-tab {
+          background: rgba(18, 22, 27, 0.8); border: 1px solid var(--border);
+          color: var(--text-dim); font-family: 'JetBrains Mono', monospace; font-size: 12px;
+          padding: 8px 16px; border-radius: 6px; cursor: pointer;
+          transition: all 0.25s ease; display: flex; align-items: center; gap: 8px;
+        }
+        .pf-mt-tab:hover { border-color: var(--accent-soft); color: var(--text); }
+        .pf-mt-tab.active {
+          background: var(--accent); color: #1A0E04; border-color: var(--accent); font-weight: 700;
+          box-shadow: 0 0 16px rgba(255, 138, 61, 0.35);
+        }
+
+        .pf-mt-kanji {
+          font-family: 'JetBrains Mono', monospace; font-size: 13px; color: var(--teal);
+          letter-spacing: 0.16em; font-weight: 600; text-transform: uppercase; margin-bottom: 8px;
+          display: flex; align-items: center; gap: 8px;
+        }
+        .pf-mt-kanji-slash { color: var(--accent); }
+        .pf-mt-name {
+          font-family: 'Space Grotesk', sans-serif; font-weight: 800;
+          font-size: clamp(38px, 5vw, 62px); line-height: 1.02; margin: 0 0 8px; letter-spacing: -0.02em;
+        }
+        .pf-mt-role {
+          font-size: clamp(16px, 2vw, 20px); font-weight: 600; color: var(--accent);
+          margin-bottom: 18px; font-family: 'Inter', sans-serif;
+        }
+        .pf-mt-divider {
+          height: 2px; width: 100%; margin: 18px 0 24px;
+          background: linear-gradient(90deg, var(--accent), var(--teal), transparent);
+          position: relative;
+        }
+        .pf-mt-divider::after {
+          content: ''; position: absolute; left: 0; top: -3px; width: 8px; height: 8px;
+          background: var(--accent); transform: rotate(45deg);
+        }
+
+        .pf-mt-stats-grid {
+          display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; margin-top: 24px; margin-bottom: 12px;
+        }
+        @media (max-width: 540px) {
+          .pf-mt-stats-grid { grid-template-columns: 1fr; }
+        }
+        .pf-mt-stat-card {
+          background: rgba(18, 22, 27, 0.85); border: 1px solid var(--border);
+          border-left: 3px solid var(--teal); padding: 12px 16px; border-radius: 6px;
+        }
+        .pf-mt-stat-label {
+          font-family: 'JetBrains Mono', monospace; font-size: 10.5px; color: var(--text-faint);
+          letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 4px;
+        }
+        .pf-mt-stat-value {
+          font-size: 13px; font-weight: 600; color: var(--text); font-family: 'Inter', sans-serif;
+        }
+
+        .pf-mt-figure-col {
+          display: flex; justify-content: center; align-items: center; position: relative; z-index: 2;
+        }
+        .pf-mt-figure-card {
+          position: relative; width: 100%; max-width: 320px; display: flex; justify-content: center; align-items: center;
+          background: transparent; border: none; outline: none; box-shadow: none; border-radius: 0; overflow: visible;
+        }
+        .pf-mt-figure-img {
+          width: 100%; max-height: 440px; object-fit: contain; display: block;
+          border: none !important; outline: none !important; box-shadow: none !important; border-radius: 0 !important;
+          mask-image: linear-gradient(to bottom, rgba(0,0,0,1) 82%, rgba(0,0,0,0) 100%);
+          -webkit-mask-image: linear-gradient(to bottom, rgba(0,0,0,1) 82%, rgba(0,0,0,0) 100%);
+          filter: drop-shadow(0 14px 28px rgba(0, 0, 0, 0.65));
+          transition: transform 0.3s ease;
+        }
+        .pf-mt-figure-img:hover {
+          transform: scale(1.02);
+        }
         .pf-eyebrow {
           display: inline-flex; align-items: center; gap: 8px;
           font-family: 'JetBrains Mono', monospace; font-size: 12.5px; color: var(--teal);
@@ -442,7 +621,7 @@ export default function Portfolio() {
           max-width: 620px; color: var(--text-dim); font-size: 16.5px; line-height: 1.7;
           margin: 0 0 36px;
         }
-        .pf-hero-ctas { display: flex; flex-wrap: wrap; gap: 14px; margin-bottom: 48px; }
+        .pf-hero-ctas { display: flex; flex-wrap: wrap; gap: 14px; }
         .pf-btn-primary, .pf-btn-secondary {
           display: inline-flex; align-items: center; gap: 8px;
           font-family: 'Inter', sans-serif; font-weight: 600; font-size: 14.5px;
@@ -724,8 +903,8 @@ export default function Portfolio() {
       <nav className="pf-nav">
         <div className="pf-wrap pf-nav-inner">
           <div className="pf-logo" onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}>
-            <span className="pf-logo-dot" />
-            sathwik
+            <img src="/logo.png" alt="S Logo" className="pf-logo-mark" />
+            <span>sathwik</span>
           </div>
           <div className="pf-nav-links">
             {NAV.map((item) => (
@@ -757,28 +936,67 @@ export default function Portfolio() {
         </div>
       </nav>
 
-      {/* HERO */}
-      <header className="pf-hero pf-wrap">
-        <div className="pf-eyebrow">
-          <span className="pf-eyebrow-pulse" />
-          Available for Opportunities
+      {/* MARRIAGE TOXIN STYLED HERO & CHARACTER SHOWCASE */}
+      <header className="pf-hero pf-wrap pf-mt-hero">
+        {/* Giant Watermark Background Typography */}
+        <div className="pf-mt-bg-watermark">
+          {currentChara.bgText.map((t, idx) => (
+            <div key={idx}>{t}</div>
+          ))}
         </div>
-        <h1 className="pf-h1">
-          {PROFILE.name}
-          <span className="pf-h1-title">{PROFILE.title}</span>
-        </h1>
-        <p className="pf-summary">{PROFILE.summary}</p>
 
-        <div className="pf-hero-ctas">
-          <a className="pf-btn-primary" href={`mailto:${PROFILE.email}`}>
-            <Mail size={16} /> Get in Touch
-          </a>
-          <a className="pf-btn-secondary" href={PROFILE.resume} target="_blank" rel="noreferrer" download="Peechara_Sathwik_Resume.pdf">
-            <Download size={16} /> Download Resume
-          </a>
-          <a className="pf-btn-secondary" href={PROFILE.github} target="_blank" rel="noreferrer">
-            <Github size={16} /> GitHub Profile
-          </a>
+        {/* Character Selector Tabs */}
+        <div className="pf-mt-selector">
+          {CHARACTER_PROFILES.map((chara) => (
+            <button
+              key={chara.id}
+              className={`pf-mt-tab ${activeCharaId === chara.id ? "active" : ""}`}
+              onClick={() => setActiveCharaId(chara.id)}
+            >
+              // {chara.name}
+            </button>
+          ))}
+        </div>
+
+        <div className="pf-mt-layout">
+          {/* Left Column: Character Data */}
+          <div className="pf-mt-data">
+            <h1 className="pf-mt-name">{currentChara.name}</h1>
+            <div className="pf-mt-role">{currentChara.title}</div>
+
+            <div className="pf-mt-divider" />
+
+            <p className="pf-summary">{currentChara.summary}</p>
+
+            <div className="pf-hero-ctas">
+              <a className="pf-btn-primary" href={`mailto:${PROFILE.email}`}>
+                <Mail size={16} /> Get in Touch
+              </a>
+              <a className="pf-btn-secondary" href={PROFILE.resume} target="_blank" rel="noreferrer" download="Peechara_Sathwik_Resume.pdf">
+                <Download size={16} /> Download Resume
+              </a>
+              <a className="pf-btn-secondary" href={PROFILE.github} target="_blank" rel="noreferrer">
+                <Github size={16} /> GitHub Profile
+              </a>
+            </div>
+
+            {/* Character Specs Grid */}
+            <div className="pf-mt-stats-grid">
+              {currentChara.stats.map((st) => (
+                <div key={st.label} className="pf-mt-stat-card">
+                  <div className="pf-mt-stat-label">{st.label}</div>
+                  <div className="pf-mt-stat-value">{st.value}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Right Column: Person Cutout ALWAYS stays displayed floating on Website Background */}
+          <div className="pf-mt-figure-col">
+            <div className="pf-mt-figure-card">
+              <img src="/sathwik_cutout.png" alt={PROFILE.name} className="pf-mt-figure-img" />
+            </div>
+          </div>
         </div>
 
         {/* CORE ENGINEERING PILLARS GRID */}
@@ -1056,7 +1274,11 @@ export default function Portfolio() {
       </section>
 
       <footer className="pf-footer pf-wrap">
-        <span>© {new Date().getFullYear()} {PROFILE.name}</span>
+        <div className="pf-footer-brand" onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}>
+          <img src="/logo.png" alt="S Logo" className="pf-logo-mark-sm" />
+          <span>sathwik</span>
+        </div>
+        <span>© {new Date().getFullYear()} {PROFILE.name}. All rights reserved.</span>
       </footer>
     </div>
   );

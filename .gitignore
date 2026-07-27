@@ -8,6 +8,10 @@ node_modules/
 *.jpg
 *.jpeg
 *.png
+!public/*.png
+!public/*.jpg
+!public/*.jpeg
+!public/*.svg
 *.gif
 WhatsApp*/
 Peechara_Sathwik_Resume/
