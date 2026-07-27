@@ -328,10 +328,10 @@ export default function Portfolio() {
     if (c) setCharaImg(c.image);
   }, [activeCharaId]);
 
-  // Clean Logo Preloader sequence
+  // Fast stylish Logo Preloader sequence
   useEffect(() => {
-    const t1 = setTimeout(() => setPageLoaded(true), 1600); // Start fade out at 1.6s
-    const t2 = setTimeout(() => setLoaderDone(true), 2100);  // Unmount loader at 2.1s
+    const t1 = setTimeout(() => setPageLoaded(true), 600); // Start fade out at 0.6s
+    const t2 = setTimeout(() => setLoaderDone(true), 950);  // Unmount loader at 0.95s
     return () => { clearTimeout(t1); clearTimeout(t2); };
   }, []);
 
@@ -353,12 +353,13 @@ export default function Portfolio() {
   return (
     <div className="pf-root">
 
-      {/* CLEAN ELEGANT LOGO PRELOADER */}
+      {/* FAST STYLISH LOGO PRELOADER */}
       {!loaderDone && (
         <div className={`pf-logo-loader ${pageLoaded ? "pf-logo-loader--done" : ""}`} aria-hidden="true">
           <div className="pf-logo-loader-content">
             <img src="/logo.png" alt="S Logo" className="pf-logo-loader-img" />
-            <div className="pf-logo-loader-ring" />
+            <div className="pf-logo-loader-glow" />
+            <div className="pf-logo-loader-bar" />
           </div>
         </div>
       )}
@@ -519,46 +520,54 @@ export default function Portfolio() {
           .pf-section { padding: 64px 0; }
         }
 
-        /* ---------- CLEAN ELEGANT LOGO PRELOADER ---------- */
+        /* ---------- FAST STYLISH LOGO PRELOADER ---------- */
         .pf-logo-loader {
           position: fixed; inset: 0; z-index: 9999; background: #0A0D10;
           display: flex; align-items: center; justify-content: center;
-          transition: opacity 0.5s ease;
+          transition: opacity 0.35s ease, transform 0.35s ease;
           pointer-events: all;
         }
         .pf-logo-loader--done {
-          opacity: 0; pointer-events: none;
+          opacity: 0; transform: scale(1.05); pointer-events: none;
         }
         .pf-logo-loader-content {
-          position: relative; display: flex; align-items: center; justify-content: center;
+          position: relative; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 16px;
         }
         .pf-logo-loader-img {
-          width: 64px; height: 64px; object-fit: contain;
-          animation: pf-logo-intro 1.2s cubic-bezier(0.22, 1, 0.36, 1) both;
-          filter: drop-shadow(0 0 24px rgba(255, 138, 61, 0.45));
+          width: 56px; height: 56px; object-fit: contain;
+          animation: pf-logo-intro 0.6s cubic-bezier(0.22, 1, 0.36, 1) both;
+          filter: drop-shadow(0 0 20px rgba(255, 138, 61, 0.55));
         }
-        .pf-logo-loader-ring {
-          position: absolute; width: 92px; height: 92px; border-radius: 50%;
-          border: 2px solid transparent; border-top-color: var(--accent); border-bottom-color: var(--teal);
-          animation: pf-loader-spin 1.4s linear infinite;
+        .pf-logo-loader-glow {
+          position: absolute; width: 100px; height: 100px; border-radius: 50%;
+          background: radial-gradient(circle, rgba(255, 138, 61, 0.22) 0%, transparent 70%);
+          animation: pf-logo-pulse 0.8s ease-in-out infinite alternate;
+        }
+        .pf-logo-loader-bar {
+          width: 48px; height: 2px; border-radius: 2px;
+          background: linear-gradient(90deg, var(--accent), var(--teal));
+          animation: pf-loader-bar 0.6s ease-in-out both;
         }
         @keyframes pf-logo-intro {
-          0%   { opacity: 0; transform: scale(0.65); }
-          60%  { opacity: 1; transform: scale(1.08); }
+          0%   { opacity: 0; transform: scale(0.7); }
           100% { opacity: 1; transform: scale(1); }
         }
-        @keyframes pf-loader-spin {
-          0%   { transform: rotate(0deg); }
-          100% { transform: rotate(360deg); }
+        @keyframes pf-logo-pulse {
+          0%   { transform: scale(0.9); opacity: 0.5; }
+          100% { transform: scale(1.25); opacity: 1; }
+        }
+        @keyframes pf-loader-bar {
+          0%   { width: 0; opacity: 0; }
+          100% { width: 48px; opacity: 1; }
         }
 
-        /* ---------- HERO ENTRANCE (PHOTO FIRST AT 2.1s, THEN TEXT AT 3.1s) ---------- */
+        /* ---------- HERO ENTRANCE (PHOTO FIRST AT 0.5s, TEXT SECOND AT 0.85s) ---------- */
         @keyframes pf-figure-enter {
-          0%   { opacity: 0; transform: translateX(50px) scale(0.95); }
+          0%   { opacity: 0; transform: translateX(35px) scale(0.97); }
           100% { opacity: 1; transform: translateX(0) scale(1); }
         }
         @keyframes pf-hero-enter {
-          0%   { opacity: 0; transform: translateY(35px); }
+          0%   { opacity: 0; transform: translateY(25px); }
           100% { opacity: 1; transform: translateY(0); }
         }
         @keyframes pf-watermark-enter {
@@ -566,14 +575,14 @@ export default function Portfolio() {
           100% { opacity: 1; }
         }
 
-        /* PHOTO APPEARS FIRST (delay 2.1s right as loader disappears) */
-        .pf-figure-entrance { animation: pf-figure-enter 1.2s cubic-bezier(0.16, 1, 0.3, 1) 2.1s both; }
+        /* PHOTO APPEARS FIRST AT 0.5s (Starts right as loader fades!) */
+        .pf-figure-entrance { animation: pf-figure-enter 0.65s cubic-bezier(0.16, 1, 0.3, 1) 0.5s both; }
 
-        /* TEXT APPEARS SECOND (delay 3.1s — 1 full second after photo starts!) */
-        .pf-hero-entrance { animation: pf-hero-enter 1.2s cubic-bezier(0.16, 1, 0.3, 1) 3.1s both; }
+        /* TEXT APPEARS SECOND AT 0.85s (Right after photo lands!) */
+        .pf-hero-entrance { animation: pf-hero-enter 0.65s cubic-bezier(0.16, 1, 0.3, 1) 0.85s both; }
 
-        /* WATERMARK FADES IN AT 2.3s */
-        .pf-watermark-entrance { animation: pf-watermark-enter 1.4s ease 2.3s both; }
+        /* WATERMARK FADES IN AT 0.6s */
+        .pf-watermark-entrance { animation: pf-watermark-enter 0.8s ease 0.6s both; }
 
         /* ---------- TAB CONTENT FADE IN ---------- */
         .pf-mt-data-anim {
