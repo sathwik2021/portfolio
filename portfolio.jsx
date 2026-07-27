@@ -330,8 +330,8 @@ export default function Portfolio() {
 
   // Fast stylish Logo Preloader sequence
   useEffect(() => {
-    const t1 = setTimeout(() => setPageLoaded(true), 600); // Start fade out at 0.6s
-    const t2 = setTimeout(() => setLoaderDone(true), 950);  // Unmount loader at 0.95s
+    const t1 = setTimeout(() => setPageLoaded(true), 500); // Preloader starts fade out at 0.5s
+    const t2 = setTimeout(() => setLoaderDone(true), 800);  // Preloader finishes & unmounts at 0.8s
     return () => { clearTimeout(t1); clearTimeout(t2); };
   }, []);
 
@@ -353,14 +353,10 @@ export default function Portfolio() {
   return (
     <div className="pf-root">
 
-      {/* FAST STYLISH LOGO PRELOADER */}
+      {/* CLEAN LOGO PRELOADER */}
       {!loaderDone && (
         <div className={`pf-logo-loader ${pageLoaded ? "pf-logo-loader--done" : ""}`} aria-hidden="true">
-          <div className="pf-logo-loader-content">
-            <img src="/logo.png" alt="S Logo" className="pf-logo-loader-img" />
-            <div className="pf-logo-loader-glow" />
-            <div className="pf-logo-loader-bar" />
-          </div>
+          <img src="/logo.png" alt="S Logo" className="pf-logo-loader-img" />
         </div>
       )}
 
@@ -520,7 +516,7 @@ export default function Portfolio() {
           .pf-section { padding: 64px 0; }
         }
 
-        /* ---------- FAST STYLISH LOGO PRELOADER ---------- */
+        /* ---------- CLEAN LOGO PRELOADER ---------- */
         .pf-logo-loader {
           position: fixed; inset: 0; z-index: 9999; background: #0A0D10;
           display: flex; align-items: center; justify-content: center;
@@ -528,69 +524,72 @@ export default function Portfolio() {
           pointer-events: all;
         }
         .pf-logo-loader--done {
-          opacity: 0; transform: scale(1.05); pointer-events: none;
-        }
-        .pf-logo-loader-content {
-          position: relative; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 16px;
+          opacity: 0; transform: scale(1.04); pointer-events: none;
         }
         .pf-logo-loader-img {
-          width: 56px; height: 56px; object-fit: contain;
-          animation: pf-logo-intro 0.6s cubic-bezier(0.22, 1, 0.36, 1) both;
-          filter: drop-shadow(0 0 20px rgba(255, 138, 61, 0.55));
-        }
-        .pf-logo-loader-glow {
-          position: absolute; width: 100px; height: 100px; border-radius: 50%;
-          background: radial-gradient(circle, rgba(255, 138, 61, 0.22) 0%, transparent 70%);
-          animation: pf-logo-pulse 0.8s ease-in-out infinite alternate;
-        }
-        .pf-logo-loader-bar {
-          width: 48px; height: 2px; border-radius: 2px;
-          background: linear-gradient(90deg, var(--accent), var(--teal));
-          animation: pf-loader-bar 0.6s ease-in-out both;
+          width: 52px; height: 52px; object-fit: contain;
+          animation: pf-logo-intro 0.55s cubic-bezier(0.16, 1, 0.3, 1) both;
         }
         @keyframes pf-logo-intro {
           0%   { opacity: 0; transform: scale(0.7); }
           100% { opacity: 1; transform: scale(1); }
         }
-        @keyframes pf-logo-pulse {
-          0%   { transform: scale(0.9); opacity: 0.5; }
-          100% { transform: scale(1.25); opacity: 1; }
-        }
-        @keyframes pf-loader-bar {
-          0%   { width: 0; opacity: 0; }
-          100% { width: 48px; opacity: 1; }
-        }
 
-        /* ---------- HERO ENTRANCE (PHOTO FIRST AT 0.5s, TEXT SECOND AT 0.85s) ---------- */
+        /* ---------- SEQUENTIAL HERO ENTRANCE ---------- */
         @keyframes pf-figure-enter {
-          0%   { opacity: 0; transform: translateX(35px) scale(0.97); }
-          100% { opacity: 1; transform: translateX(0) scale(1); }
+          0%   { opacity: 0; transform: translate3d(60px, 0, 0) scale(0.96); }
+          100% { opacity: 1; transform: translate3d(0, 0, 0) scale(1); }
         }
-        @keyframes pf-hero-enter {
-          0%   { opacity: 0; transform: translateY(25px); }
-          100% { opacity: 1; transform: translateY(0); }
+        @keyframes pf-hero-text-enter {
+          0%   { opacity: 0; transform: translate3d(-28px, 0, 0) scale(0.985); }
+          60%  { opacity: 1; transform: translate3d(6px, 0, 0) scale(1.002); }
+          100% { opacity: 1; transform: translate3d(0, 0, 0) scale(1); }
+        }
+        @keyframes pf-pillars-up-enter {
+          0%   { opacity: 0; transform: translate3d(0, 45px, 0); }
+          100% { opacity: 1; transform: translate3d(0, 0, 0); }
         }
         @keyframes pf-watermark-enter {
           0%   { opacity: 0; }
           100% { opacity: 1; }
         }
 
-        /* PHOTO APPEARS FIRST AT 0.5s (Starts right as loader fades!) */
-        .pf-figure-entrance { animation: pf-figure-enter 0.65s cubic-bezier(0.16, 1, 0.3, 1) 0.5s both; }
+        /* Initial hidden state before loader completes — ALL text, tabs, pillars, & photo hidden */
+        .pf-figure-entrance,
+        .pf-hero-entrance,
+        .pf-mt-selector,
+        .pf-pillars-grid,
+        .pf-watermark-entrance {
+          opacity: 0;
+          will-change: transform, opacity;
+        }
 
-        /* TEXT APPEARS SECOND AT 0.85s (Right after photo lands!) */
-        .pf-hero-entrance { animation: pf-hero-enter 0.65s cubic-bezier(0.16, 1, 0.3, 1) 0.85s both; }
+        /* Once loader is finished (loaderDone = true): */
+        /* 1. PHOTO APPEARS FIRST (0.15s delay — smooth 0.75s slide RIGHT to LEFT) */
+        .pf-animate-start .pf-figure-entrance {
+          animation: pf-figure-enter 0.75s cubic-bezier(0.16, 1, 0.3, 1) 0.15s forwards;
+        }
+        /* 2. HERO TEXT & TABS APPEAR SECOND (0.5s delay — smooth 0.75s slide LEFT to RIGHT) */
+        .pf-animate-start .pf-hero-entrance,
+        .pf-animate-start .pf-mt-selector {
+          animation: pf-hero-text-enter 0.9s cubic-bezier(0.22, 1, 0.36, 1) 0.5s forwards;
+        }
+        /* 3. CORE ENGINEERING PILLARS CARDS APPEAR THIRD (0.8s delay — smooth 0.75s slide BOTTOM to TOP) */
+        .pf-animate-start .pf-pillars-grid {
+          animation: pf-pillars-up-enter 0.75s cubic-bezier(0.16, 1, 0.3, 1) 0.8s forwards;
+        }
+        /* 4. WATERMARK FADES IN AT 0.2s */
+        .pf-animate-start .pf-watermark-entrance {
+          animation: pf-watermark-enter 0.9s ease 0.2s forwards;
+        }
 
-        /* WATERMARK FADES IN AT 0.6s */
-        .pf-watermark-entrance { animation: pf-watermark-enter 0.8s ease 0.6s both; }
-
-        /* ---------- TAB CONTENT FADE IN ---------- */
+        /* ---------- INTERACTIVE TAB SWITCHING FADE IN ---------- */
         .pf-mt-data-anim {
-          animation: pf-tab-slide 0.65s cubic-bezier(0.22,1,0.36,1) both;
+          animation: pf-tab-slide 0.25s cubic-bezier(0.16, 1, 0.3, 1) both;
         }
         @keyframes pf-tab-slide {
-          from { opacity: 0; transform: translateX(-14px); }
-          to   { opacity: 1; transform: translateX(0); }
+          0%   { opacity: 0; transform: translate3d(-12px, 0, 0); }
+          100% { opacity: 1; transform: translate3d(0, 0, 0); }
         }
 
         /* ---------- FIGURE WRAP ---------- */
@@ -601,6 +600,10 @@ export default function Portfolio() {
         /* ---------- MARRIAGE TOXIN ANIME STYLE HERO & CHARACTER SHOWCASE ---------- */
         .pf-mt-hero {
           position: relative; padding: 50px 0 64px; overflow: hidden;
+          opacity: 0; visibility: hidden; transition: opacity 0.25s ease, visibility 0.25s ease;
+        }
+        .pf-animate-start.pf-mt-hero {
+          opacity: 1; visibility: visible;
         }
         .pf-mt-bg-watermark {
           position: absolute; top: 10px; right: -10px; z-index: 0; pointer-events: none;
@@ -1036,7 +1039,7 @@ export default function Portfolio() {
       </nav>
 
       {/* MARRIAGE TOXIN STYLED HERO & CHARACTER SHOWCASE */}
-      <header className="pf-hero pf-wrap pf-mt-hero">
+      <header className={`pf-hero pf-wrap pf-mt-hero ${loaderDone ? "pf-animate-start" : ""}`}>
         {/* Giant Watermark Background Typography */}
         <div className="pf-mt-bg-watermark pf-watermark-entrance">
           {currentChara.bgText.map((t, idx) => (
@@ -1052,14 +1055,14 @@ export default function Portfolio() {
               className={`pf-mt-tab ${activeCharaId === chara.id ? "active" : ""}`}
               onClick={() => setActiveCharaId(chara.id)}
             >
-              // {chara.name}
+              {chara.name}
             </button>
           ))}
         </div>
 
         <div className="pf-mt-layout">
-          {/* Left Column: Character Data — key forces re-mount animation on tab change */}
-          <div key={activeCharaId} className="pf-mt-data pf-mt-data-anim pf-hero-entrance">
+          {/* Left Column: Character Data — key forces fast 0.25s re-mount animation on tab change */}
+          <div key={activeCharaId} className="pf-mt-data pf-hero-entrance pf-mt-data-anim">
             <h1 className="pf-mt-name">{currentChara.name}</h1>
             <div className="pf-mt-role">{currentChara.title}</div>
 
@@ -1101,7 +1104,7 @@ export default function Portfolio() {
         </div>
 
         {/* CORE ENGINEERING PILLARS GRID */}
-        <div className="pf-pillars-grid">
+        <div className="pf-pillars-grid pf-hero-entrance">
           {ENGINEERING_PILLARS.map((p) => {
             const Icon = p.icon;
             return (
