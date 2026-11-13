@@ -1191,7 +1191,7 @@ export default function Portfolio() {
 
         {/* PROJECT FILTER TABS */}
         <div className="pf-filter-tabs">
-          {["All", "AI & NLP", "Computer Vision", "Infra & Tooling"].map((cat) => (
+          {["All", ...new Set(PROJECTS.map((p) => p.category))].map((cat) => (
             <button
               key={cat}
               className={`pf-tab-btn ${activeCategory === cat ? "pf-tab-active" : ""}`}
