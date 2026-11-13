@@ -1185,7 +1185,7 @@ export default function Portfolio() {
         </Reveal>
         <Reveal>
           <p className="pf-section-sub">
-            Four projects, four execution pipelines. Click filter categories or view the architecture stages for each system.
+            {PROJECTS.length} projects. Click filter categories or view the architecture stages for each system.
           </p>
         </Reveal>
 
