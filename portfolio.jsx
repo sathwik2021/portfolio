@@ -1185,13 +1185,13 @@ export default function Portfolio() {
         </Reveal>
         <Reveal>
           <p className="pf-section-sub">
-            Four projects, four execution pipelines. Click filter categories or view the architecture stages for each system.
+            {PROJECTS.length} projects. Click filter categories or view the architecture stages for each system.
           </p>
         </Reveal>
 
         {/* PROJECT FILTER TABS */}
         <div className="pf-filter-tabs">
-          {["All", "AI & NLP", "Computer Vision", "Infra & Tooling"].map((cat) => (
+          {["All", ...new Set(PROJECTS.map((p) => p.category))].map((cat) => (
             <button
               key={cat}
               className={`pf-tab-btn ${activeCategory === cat ? "pf-tab-active" : ""}`}
